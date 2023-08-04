@@ -38,7 +38,7 @@
           outputHash = "sha256-X3dO/jW1c9hMfQKRFYFDFpbGK+TGBAWpNtv+kPJ5KDw=";
         };
 
-        monty-matsim = pkgs.stdenv.mkDerivation rec {
+        matsim = pkgs.stdenv.mkDerivation rec {
           pname = "matsim-example-project";
           version = "0.0.1-SNAPSHOT";
           
@@ -55,8 +55,8 @@
           '';
         };
                                        
-        monty-matsim-2 = pkgs.stdenv.mkDerivation rec {
-          pname = "monty-matsim";
+        matsim-2 = pkgs.stdenv.mkDerivation rec {
+          pname = "matsim";
           version = "0.1.0";
           
           src = ./.;
@@ -73,9 +73,9 @@
         };
         
       in rec {        
-        packages.default = packages.monty-matsim;
-        packages.monty-matsim = monty-matsim;
-        packages.monty-matsim-2 = monty-matsim-2;
+        packages.default = packages.matsim;
+        packages.matsim = matsim;
+        packages.matsim-2 = matsim-2;
         packages.maven-repository = maven-repository;
         packages.maven-repository-2 = maven-repository-2;
         
