@@ -35,7 +35,7 @@
           outputHashMode = "recursive";
           # replace this with the correct SHA256
           # outputHash = pkgs.lib.fakeSha256;
-          outputHash = "sha256-X3dO/jW1c9hMfQKRFYFDFpbGK+TGBAWpNtv+kPJ5KDw=";
+          outputHash = "sha256-h4SIccpsFq9wzJwI1qQ3uJtuccWx/RX8KNSHu1M0IYk=";
         };
 
         matsim = pkgs.stdenv.mkDerivation rec {
@@ -56,22 +56,51 @@
         };
                                        
         matsim-2 = pkgs.stdenv.mkDerivation rec {
-          pname = "matsim";
-          version = "0.1.0";
+          pname = "matsim-example-project";
+          version = "0.1.0-SNAPSHOT";
           
           src = ./.;
-          buildInputs = [ pkgs.maven ];
+          buildInputs = with pkgs; [ maven jre ];
+          nativeBuildInputs = with pkgs; [ makeWrapper ];
           
           buildPhase = ''
           echo "Using repository ${maven-repository-2}"
           mvn --offline -Dmaven.repo.local=${maven-repository-2} package;
+          # mvn --offline -Dmaven.repo.local=${maven-repository-2} install;
           '';
 
+          # installPhase = ''
+          # install -Dm644 target/${pname}-${version}.jar $out/share/java
+          # '';
+          
           installPhase = ''
+          mkdir -pv $out/share/java $out/bin
           install -Dm644 target/${pname}-${version}.jar $out/share/java
+          makeWrapper ${pkgs.jre}/bin/java $out/bin/${pname} \
+                      --add-flags "-cp $out/share/java/${pname}-${version}.jar"
           '';
+
+          
+          # installPhase = ''
+   				#  mkdir -p $out/bin
+   				
+   				#  classpath=$(find ${maven-repository-2} -name "*.jar" -printf ':%h/%f');
+   				#  #install -Dm644 target/${pname}-${version}.jar $out/share/java
+   				
+   				#  echo "====================="
+   				#  echo $(ls)
+   				#  echo $(ls target)
+   				
+   				#  install -Dm644 target/${pname}-${version}.jar $out/share/java
+   				#  # create a wrapper that will automatically set the classpath
+   				#  # this should be the paths from the dependency derivation
+   				#  makeWrapper ${pkgs.jre}/bin/java $out/bin/${pname} \
+   				#        --add-flags "-classpath $out/share/java/${pname}-${version}.jar:''${classpath#:}" \
+   				#        --add-flags "Main"
+   				# ''; 
+          
         };
-        
+
       in rec {        
         packages.default = packages.matsim;
         packages.matsim = matsim;

@@ -4,7 +4,7 @@ project-info.json: pom.xml
 maven-repository: project-info.json
 	nix build .\#$@
 
-maven-repository-2: project-info.json
+maven-repository-2: 
 	nix build .\#$@
 
 matsim: maven-repository
@@ -16,3 +16,6 @@ matsim-2: maven-repository-2
 distclean:
 	rm matsim-example-project-0.0.1-SNAPSHOT.jar
 	rm -r target
+
+maven-install:
+	mvn -offline install
