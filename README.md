@@ -13,7 +13,7 @@ The "Double Invocation" method succeeds
 ```
 make matsim-2
 ```
-but requires manual sha update on different machines.
+but requires manual sha update for different builds.
 
 
 The mvn2nix method (preferred) not yet working
