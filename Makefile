@@ -4,13 +4,7 @@ project-info.json: pom.xml
 maven-repository: project-info.json
 	nix build .\#$@
 
-maven-repository-2: 
-	nix build .\#$@
-
 matsim: maven-repository
-	nix build .\#$@
-
-matsim-2: maven-repository-2
 	nix build .\#$@
 
 distclean:
