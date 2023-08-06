@@ -9,8 +9,27 @@
       let
         pkgs = import nixpkgs { inherit system; };
 
-        maven-repository = pkgs.callPackage ./build-maven-repository.nix { };
+        # mvn2nix plugin
+        maven-repository = (pkgs.buildMaven ./project-info.json).repo;
+        
+        matsim = pkgs.stdenv.mkDerivation rec {
+          pname = "matsim-example-project";
+          version = "0.0.1-SNAPSHOT";
+          
+          src = ./.;
+          buildInputs = [ pkgs.maven ];
+          
+          buildPhase = ''
+          echo "Using repository ${maven-repository}"
+          mvn --offline -Dmaven.repo.local=${maven-repository} package;
+          '';
 
+          installPhase = ''
+          install -Dm644 target/${pname}-${version}.jar $out/share/java
+          '';
+        };
+
+        # double invocation
         maven-repository-2 = pkgs.stdenv.mkDerivation {
           name = "maven-repository";
           buildInputs = [ pkgs.maven ];
@@ -38,23 +57,6 @@
           outputHash = "sha256-URq6vNUlF5tttDUeZ97o8IPMZgRMA17MpHmZdeV4wDw=";
         };
 
-        matsim = pkgs.stdenv.mkDerivation rec {
-          pname = "matsim-example-project";
-          version = "0.0.1-SNAPSHOT";
-          
-          src = ./.;
-          buildInputs = [ pkgs.maven ];
-          
-          buildPhase = ''
-          echo "Using repository ${maven-repository}"
-          mvn --offline -Dmaven.repo.local=${maven-repository} package;
-          '';
-
-          installPhase = ''
-          install -Dm644 target/${pname}-${version}.jar $out/share/java
-          '';
-        };
-                                       
         matsim-2 = pkgs.stdenv.mkDerivation rec {
           pname = "matsim-example-project";
           version = "0.1.0-SNAPSHOT";
