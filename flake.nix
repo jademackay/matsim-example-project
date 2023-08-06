@@ -35,7 +35,7 @@
           outputHashMode = "recursive";
           # replace this with the correct SHA256
           # outputHash = pkgs.lib.fakeSha256;
-          outputHash = "sha256-h4SIccpsFq9wzJwI1qQ3uJtuccWx/RX8KNSHu1M0IYk=";
+          outputHash = "sha256-URq6vNUlF5tttDUeZ97o8IPMZgRMA17MpHmZdeV4wDw=";
         };
 
         matsim = pkgs.stdenv.mkDerivation rec {
