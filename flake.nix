@@ -37,9 +37,10 @@
         packages.maven-repository = maven-repository;
         
         devShell =  pkgs.mkShell {
-          buildInputs = [
-            pkgs.maven
-            pkgs.jre
+          buildInputs = with pkgs; [
+            maven
+            jre
+            fx
           ]; 
         };        
       }
